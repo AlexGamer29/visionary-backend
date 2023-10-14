@@ -2,11 +2,11 @@ const { updateDocument } = require("../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
-    username: Joi.string().required(),
-    email: Joi.string().required(),
-    password: Joi.string().required(),
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+    username: Joi.string(),
+    email: Joi.string(),
+    password: Joi.string(),
 });
 
 const updateUser = async (req, res) => {
