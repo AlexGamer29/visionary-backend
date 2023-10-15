@@ -14,5 +14,10 @@ module.exports = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AWS_SESSION_TOKEN: process.env.AWS_SESSION_TOKEN,
-    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME
+    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    REDIS_URL: process.env.REDIS_URL,
+    REDIS_PORT: process.env.REDIS_PORT,
+    REDIS_HOST: process.env.REDIS_HOST,
+    REDIS_USERNAME: process.env.REDIS_USERNAME,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD
 };

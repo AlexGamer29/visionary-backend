@@ -4,15 +4,32 @@ const bodyParser = require("body-parser");
 const mongoose = require("./config/db");
 const morgan = require("morgan");
 const cors = require("cors");
+const apicache = require("apicache");
+const redisClient = require("./config/redis")
+
 const routes = require("./routes/index.route");
 const app = express();
 
 // * Database connection
-var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", function () {
-    console.log("db connected!");
+    console.log("DB connected!");
 });
+
+// Get the Redis client instance
+let cacheWithRedis = apicache.options({
+    redisClient: redisClient,
+    debug: true,
+    trackPerformance: true,
+    statusCodes: {
+        include: [200]
+    }
+}).middleware;
+
+// if redisClient option is defined, apicache will use redis client
+// instead of built-in memory store
+app.use(cacheWithRedis("2 minutes"));
 
 // * Cors
 app.use(cors());
