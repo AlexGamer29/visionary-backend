@@ -19,5 +19,10 @@ module.exports = {
     REDIS_PORT: process.env.REDIS_PORT,
     REDIS_HOST: process.env.REDIS_HOST,
     REDIS_USERNAME: process.env.REDIS_USERNAME,
-    REDIS_PASSWORD: process.env.REDIS_PASSWORD
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    CLIENT_ID: process.env.CLIENT_ID,
+    CLIENT_SECRET: process.env.CLIENT_SECRET,
+    REDIRECT_URI: process.env.REDIRECT_URI,
+    REFRESH_TOKEN: process.env.REFRESH_TOKEN,
+    STORAGE_FOLDER: process.env.STORAGE_FOLDER
 };
