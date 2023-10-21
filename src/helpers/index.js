@@ -21,7 +21,7 @@ const { find,
     deleteDocuments
 } = require("./mongoose");
 
-const { uploadFile } = require("./google-drive");
+const { uploadFile, listFiles } = require("./google-drive");
 
 
 module.exports = {
@@ -46,5 +46,6 @@ module.exports = {
     findOneAndSelect,
     findPopulateSortAndLimit,
     deleteDocuments,
-    uploadFile
+    uploadFile,
+    listFiles
 };

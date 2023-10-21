@@ -28,6 +28,15 @@ const uploadFile = async (fileObject) => {
     console.log(`Uploaded file ${data.name} ${data.id}`);
 };
 
+const listFiles = async () => {
+    const { data } = await google.drive({ version: "v3", auth }).files.list({
+        q: `'${STORAGE_FOLDER}' in parents`
+    });
+    console.log(`List file ${data}`);
+    return data;
+}
+
 module.exports = {
-    uploadFile
+    uploadFile,
+    listFiles
 };
