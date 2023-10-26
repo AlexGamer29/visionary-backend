@@ -5,7 +5,7 @@ const mongoose = require("./config/db");
 const morgan = require("morgan");
 const cors = require("cors");
 const apicache = require("apicache");
-const redisClient = require("./config/redis")
+const redisClient = require("./config/redis");
 
 const routes = require("./routes/index.route");
 const app = express();
@@ -45,8 +45,7 @@ app.use(morgan("combined"));
 app.use("/api", routes);
 
 app.get("/", (req, res) => {
-    console.log("hello");
-    res.send("hello");
+    res.sendFile(`${process.cwd()}/index.html`);
 });
 
 app.use("*", (req, res) => {
