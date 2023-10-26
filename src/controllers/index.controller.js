@@ -6,7 +6,7 @@ const deleteUsers = require("./user/delete-users.controller");
 
 const { signUp, logIn } = require("./auth/auth.controller");
 
-// const download = require("./google-drive/download.controller");
+const download = require("./google-drive/download.controller");
 const upload = require("./google-drive/upload.controller");
 const list = require("./google-drive/list.controller");
 
@@ -19,7 +19,7 @@ module.exports = {
     deleteUsers,
     signUp,
     logIn,
-    // download,
+    download,
     upload,
     list
 };

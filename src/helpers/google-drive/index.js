@@ -1,4 +1,5 @@
 const stream = require("stream");
+const fs = require("fs");
 const path = require("path");
 const { google } = require("googleapis");
 
@@ -28,6 +29,44 @@ const uploadFile = async (fileObject) => {
     console.log(`Uploaded file ${data.name} ${data.id}`);
 };
 
+const getFileName = async (fileId) => {
+    const drive = google.drive({ version: 'v3', auth });
+    try {
+        const response = await drive.files.get({
+            fileId,
+            fields: 'name',
+        });
+        return response.data.name;
+    } catch (err) {
+        console.error('Error getting file name:', err);
+        throw err;
+    }
+}
+
+const downloadFile = async (fileId) => {
+    const fileName = await getFileName(fileId);
+    const destinationPath = `${process.cwd()}/test/${fileName}`;
+
+    const drive = google.drive({ version: 'v3', auth });
+    try {
+        return await drive.files.get({ fileId, alt: 'media' }, { responseType: 'stream' });
+        // const writer = fs.createWriteStream(destinationPath);
+        // data
+        //     .on('end', () => {
+        //         console.log('File downloaded successfully.');
+        //     })
+        //     .on('error', (err) => {
+        //         console.error('Error downloading file:', err);
+        //         fs.unlinkSync(destinationPath); // Delete the file if there was an error
+        //         throw err;
+        //     })
+        //     .pipe(writer);
+    } catch (err) {
+        console.error('Error downloading file:', err);
+        throw err;
+    }
+}
+
 const listFiles = async () => {
     const { data } = await google.drive({ version: "v3", auth }).files.list({
         q: `'${STORAGE_FOLDER}' in parents`
@@ -38,5 +77,6 @@ const listFiles = async () => {
 
 module.exports = {
     uploadFile,
+    downloadFile,
     listFiles
 };
