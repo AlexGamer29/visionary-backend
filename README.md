@@ -1,6 +1,7 @@
 # nodejs-template
 
 ### Environment variables
+
 PORT=
 DB_NAME=
 DB_USER=

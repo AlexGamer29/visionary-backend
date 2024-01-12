@@ -1,4 +1,5 @@
-const { find,
+const {
+    find,
     findOne,
     insertNewDocument,
     updateDocument,
@@ -18,9 +19,8 @@ const { find,
     findSliceAndPopulate,
     findOneAndSelect,
     findPopulateSortAndLimit,
-    deleteDocuments
-} = require("./mongoose");
-
+    deleteDocuments,
+} = require('./mongoose')
 
 module.exports = {
     find,
@@ -43,5 +43,5 @@ module.exports = {
     findSliceAndPopulate,
     findOneAndSelect,
     findPopulateSortAndLimit,
-    deleteDocuments
-};
+    deleteDocuments,
+}

@@ -1,12 +1,15 @@
-const { listObjects } = require('../../services/index.service')
+const { deleteObjectS3 } = require('../../services/index.service')
 const { client } = require('../../config/s3')
 
-const getObjects = async (req, res) => {
+const deleteObject = async (req, res, next) => {
     try {
+        const { key } = req.query
+
         const params = {
             Bucket: 'visionary-img',
+            Key: key,
         }
-        const command = listObjects(params)
+        const command = deleteObjectS3(params)
         client
             .send(command)
             .then((data) => res.status(200).send({ status: 200, data }))
@@ -16,4 +19,4 @@ const getObjects = async (req, res) => {
     }
 }
 
-module.exports = getObjects
+module.exports = deleteObject
