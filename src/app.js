@@ -1,60 +1,61 @@
-const express = require("express");
-const cookieParser = require('cookie-parser');
-const bodyParser = require("body-parser");
-const mongoose = require("./config/db");
-const morgan = require("morgan");
-const cors = require("cors");
-const apicache = require("apicache");
-const redisClient = require("./config/redis")
+const express = require('express')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const cors = require('cors')
+const apicache = require('apicache')
+const mongoose = require('./config/db')
+const redisClient = require('./config/redis')
 
-const routes = require("./routes/index.route");
-const app = express();
+const routes = require('./routes/index.route')
+
+const app = express()
 
 // * Database connection
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "Connection error:"));
-db.once("open", function () {
-    console.log("DB connected!");
-});
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'Connection error:'))
+db.once('open', () => {
+    console.log('DB connected!')
+})
 
 // Get the Redis client instance
-let cacheWithRedis = apicache.options({
-    redisClient: redisClient,
+const cacheWithRedis = apicache.options({
+    redisClient,
     debug: true,
     trackPerformance: true,
     statusCodes: {
-        include: [200]
-    }
-}).middleware;
+        include: [200],
+    },
+}).middleware
 
 // if redisClient option is defined, apicache will use redis client
 // instead of built-in memory store
-app.use(cacheWithRedis("2 minutes"));
+// app.use(cacheWithRedis("2 minutes"));
 
 // * Cors
-app.use(cors());
+app.use(cors())
 
 // Middleware to parse cookies
-app.use(cookieParser());
+app.use(cookieParser())
 // * Body Parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("combined"));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(morgan('combined'))
 
 // * Api routes
-app.use("/api", routes);
+app.use('/api', routes)
 
-app.get("/", (req, res) => {
-    console.log("hello");
-    res.send("hello");
-});
+app.get('/', (req, res) => {
+    console.log('hello')
+    res.send('hello')
+})
 
-app.use("*", (req, res) => {
-    res.send("Route not found");
-});
+app.use('*', (req, res) => {
+    res.send('Route not found')
+})
 
-let PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`))
 
-module.exports = app;
+module.exports = app

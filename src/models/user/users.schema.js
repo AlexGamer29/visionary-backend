@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const schemaType = require("../../types/mongoose");
+const mongoose = require('mongoose')
+const schemaType = require('../../types/mongoose')
 
 const userSchema = new mongoose.Schema(
     {
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
             default: Date.now,
         },
     },
-    { timestamps: true }
-);
+    { timestamps: true },
+)
 
-module.exports = userSchema;
+module.exports = userSchema

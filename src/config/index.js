@@ -1,11 +1,11 @@
-require("dotenv").config();
+require('dotenv').config()
 
 module.exports = {
     PORT: process.env.PORT,
     DB_NAME: process.env.DB_NAME,
     DB_USER: process.env.DB_USER,
     DB_PASS: process.env.DB_PASS,
-    SECRET: "HTP",
+    SECRET: 'HTP',
     MAIL_HOST: process.env.MAIL_HOST,
     MAIL_PORT: process.env.MAIL_PORT,
     MAIL_USER: process.env.MAIL_USER,
@@ -19,5 +19,7 @@ module.exports = {
     REDIS_PORT: process.env.REDIS_PORT,
     REDIS_HOST: process.env.REDIS_HOST,
     REDIS_USERNAME: process.env.REDIS_USERNAME,
-    REDIS_PASSWORD: process.env.REDIS_PASSWORD
-};
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    S3_ENDPOINT: process.env.S3_ENDPOINT,
+    S3_REGION: process.env.S3_REGION,
+}

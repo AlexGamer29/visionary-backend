@@ -1,10 +1,13 @@
-const getUsers = require("./user/get-users.controller");
-const addUser = require("./user/add-user.controller");
-const deleteUser = require("./user/delete-user.controller");
-const updateUser = require("./user/update-user.controller");
-const deleteUsers = require("./user/delete-users.controller");
+const getUsers = require('./user/get-users.controller')
+const addUser = require('./user/add-user.controller')
+const deleteUser = require('./user/delete-user.controller')
+const updateUser = require('./user/update-user.controller')
+const deleteUsers = require('./user/delete-users.controller')
 
-const { signUp, logIn } = require("./auth/auth.controller")
+const { signUp, logIn } = require('./auth/auth.controller')
+
+const getObjects = require('./s3/get-objects.controller')
+const putObject = require('./s3/put-object.controller')
 
 module.exports = {
     getUsers,
@@ -13,5 +16,7 @@ module.exports = {
     updateUser,
     deleteUsers,
     signUp,
-    logIn
-};
+    logIn,
+    getObjects,
+    putObject,
+}
