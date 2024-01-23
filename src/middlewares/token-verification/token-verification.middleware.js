@@ -9,7 +9,7 @@ function authenticateJWT(req, res, next) {
 
     if (!authHeader) {
         return res
-            .status(401)
+            .status(400)
             .json({ message: 'Authentication failed. No token provided.' })
     }
 
@@ -21,9 +21,14 @@ function authenticateJWT(req, res, next) {
         // Verify the token using your secret key
         jwt.verify(token, SECRET, (err, user) => {
             if (err) {
-                return res
-                    .status(403)
-                    .json({ message: 'Authentication failed. Invalid token.' })
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({
+                        message: 'Authentication failed. Token expired.',
+                    })
+                }
+                return res.status(403).json({
+                    message: 'Authentication failed. Invalid token.',
+                })
             }
             // If the token is valid, you can attach the user object to the request for later use in route handlers
             req.user = user
@@ -31,10 +36,6 @@ function authenticateJWT(req, res, next) {
             // Continue to the next middleware or route handler
             next()
         })
-    } else {
-        return res
-            .status(401)
-            .json({ message: 'Authentication failed. Invalid token format.' })
     }
 }
 

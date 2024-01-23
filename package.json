@@ -7,6 +7,7 @@
         "start": "node src/app.js",
         "dev": "nodemon src/app.js",
         "test": "npx mocha --timeout 30000 test/api.test.js",
+        "format:full": "prettier --write . && eslint --fix .",
         "lint:fix": "eslint --fix .",
         "lint": "eslint .",
         "format": "prettier --write .",

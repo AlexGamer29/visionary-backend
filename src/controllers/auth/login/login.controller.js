@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const Joi = require('joi')
 const { getPopulatedData } = require('../../../helpers')
+const { generateTokens } = require('../../../utils')
 
 const { SECRET } = require('../../../config')
 
@@ -31,7 +32,13 @@ const logIn = async (req, res) => {
             }
             user.password = undefined
             const token = jwt.sign({ id: user._id }, SECRET)
-            res.status(200).send({ status: 200, user, token })
+            const { accessToken, refreshToken } = await generateTokens(user)
+            res.status(200).send({
+                status: 200,
+                user,
+                accessToken,
+                refreshToken,
+            })
         } else {
             return res
                 .status(404)
