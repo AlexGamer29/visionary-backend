@@ -6,8 +6,7 @@ const deleteUsers = require('./user/delete-users.controller')
 
 const { signUp, logIn } = require('./auth/auth.controller')
 
-const getObjects = require('./s3/get-objects.controller')
-const putObject = require('./s3/put-object.controller')
+const { getObjects, putObject, deleteObject } = require('./s3/s3.controller')
 
 module.exports = {
     getUsers,
@@ -19,4 +18,5 @@ module.exports = {
     logIn,
     getObjects,
     putObject,
+    deleteObject
 }
