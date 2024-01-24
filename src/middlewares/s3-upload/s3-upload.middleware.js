@@ -7,25 +7,9 @@ const fileFilter = (req, file, cb) => {
     if (allowedMimeTypes.includes(file.mimetype)) {
         cb(null, true)
     } else {
-        cb('Error: Allow images only of extensions jpeg|jpg !')
-    }
-}
-
-// Middleware to check if the uploaded file is an image
-const checkImage = (req, res, next) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' })
-    }
-
-    if (req?.file?.size === 0) {
-        return res.status(400).json({ error: 'Empty file' })
-    }
-
-    if (allowedMimeTypes.includes(req.file.mimetype)) {
-        next() // File is an image, proceed to the next middleware
-    } else {
-        // File is not an image, return an error response
-        return res.status(400).json({ error: 'Uploaded file is not an image' })
+        req.fileValidationError =
+            'Allow images only of extensions jpeg|jpg|png|gif'
+        cb(null, false)
     }
 }
 
@@ -48,4 +32,15 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 * 50 }, // 50MB
 })
 
-module.exports = { upload }
+// Custom error handler middleware for MulterError
+const handleMulterError = (err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json({
+            status: 400,
+            message: err.message,
+        })
+    }
+    next(err)
+}
+
+module.exports = { upload, handleMulterError }
