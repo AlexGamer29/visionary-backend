@@ -1,5 +1,43 @@
-const { deleteObjectS3 } = require('../../services/index.service')
+const { deleteObjectS3, listObjects } = require('../../services/index.service')
 const { client } = require('../../config/s3')
+
+const getObjects = async (req, res) => {
+    try {
+        const params = {
+            Bucket: 'visionary-img',
+        }
+        const command = listObjects(params)
+        client
+            .send(command)
+            .then((data) => res.status(200).send({ status: 200, data }))
+            .catch((err) => res.status(500).send({ status: 200, err }))
+    } catch (e) {
+        res.status(400).send({ status: 400, message: e.message })
+    }
+}
+
+const putObject = async (req, res, next) => {
+    try {
+        const data = {}
+        if (req.file) {
+            data.image = req.file.location
+            res.status(200).send({
+                status: 200,
+                data: {
+                    link: data.image,
+                },
+            })
+        } else {
+            // This is a non-JPG file, pass control to the next middleware/controller
+            res.status(400).send({
+                status: 400,
+                message: 'No file was uploaded',
+            })
+        }
+    } catch (e) {
+        res.status(400).send({ status: 400, message: e.message })
+    }
+}
 
 const deleteObject = async (req, res, next) => {
     try {
@@ -19,4 +57,4 @@ const deleteObject = async (req, res, next) => {
     }
 }
 
-module.exports = deleteObject
+module.exports = { getObjects, putObject, deleteObject }
