@@ -18,5 +18,5 @@ module.exports = {
     logIn,
     getObjects,
     putObject,
-    deleteObject
+    deleteObject,
 }

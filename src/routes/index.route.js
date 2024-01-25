@@ -10,6 +10,6 @@ const file = require('./file/file.route')
 // AUTH Routes * /api/auth/*
 router.use('/auth', auth)
 router.use('/user', authenticateJWT, user)
-router.use('/file', file)
+router.use('/file', authenticateJWT, file)
 
 module.exports = router

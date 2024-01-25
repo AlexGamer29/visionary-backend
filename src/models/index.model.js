@@ -7,5 +7,6 @@ const db = {}
 db.mongoose = mongoose
 
 db.users = require('./user/users.model')
+db.updateFile = require('./upload-files/upload-files.model')
 
 module.exports = db
