@@ -1,5 +1,7 @@
+const { ObjectId } = require('mongodb')
 const { deleteObjectS3, listObjects } = require('../../services/index.service')
 const { client } = require('../../config/s3')
+const { insertNewDocument } = require('../../helpers')
 
 const getObjects = async (req, res) => {
     try {
@@ -18,13 +20,31 @@ const getObjects = async (req, res) => {
 
 const putObject = async (req, res, next) => {
     try {
-        const data = {}
+        if (req.fileValidationError) {
+            return res.status(400).send({
+                status: 400,
+                message: req.fileValidationError,
+            })
+        }
+
         if (req.file) {
-            data.image = req.file.location
+            data = req.file
+            const uploadFile = {
+                userId: new ObjectId(req.user.id),
+                originalName: data.originalname,
+                encoding: data.encoding,
+                mimeType: data.mimetype,
+                size: data.size,
+                bucket: data.bucket,
+                key: data.key,
+                location: data.location,
+                eTag: data.etag,
+            }
+            await insertNewDocument('updateFile', uploadFile)
             res.status(200).send({
                 status: 200,
                 data: {
-                    link: data.image,
+                    link: data.location,
                 },
             })
         } else {

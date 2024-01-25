@@ -24,5 +24,5 @@ module.exports = {
     removeRefreshToken,
     getObjects,
     putObject,
-    deleteObject
+    deleteObject,
 }
