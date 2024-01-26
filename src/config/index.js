@@ -7,6 +7,7 @@ module.exports = {
     DB_PASS: process.env.DB_PASS,
     SECRET: process.env.SECRET,
     REFRESH_SECRET: process.env.REFRESH_SECRET,
+    RESET_SECRET: process.env.RESET_SECRET,
     MAIL_HOST: process.env.MAIL_HOST,
     MAIL_PORT: process.env.MAIL_PORT,
     MAIL_USER: process.env.MAIL_USER,
@@ -23,4 +24,8 @@ module.exports = {
     REDIS_PASSWORD: process.env.REDIS_PASSWORD,
     S3_ENDPOINT: process.env.S3_ENDPOINT,
     S3_REGION: process.env.S3_REGION,
+    HOST_NODEMAILER: process.env.HOST_NODEMAILER,
+    PORT_NODEMAILER: process.env.PORT_NODEMAILER,
+    USER_NODEMAILER: process.env.USER_NODEMAILER,
+    PASS_NODEMAILER: process.env.PASS_NODEMAILER,
 }

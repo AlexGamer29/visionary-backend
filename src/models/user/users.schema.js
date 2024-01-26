@@ -24,9 +24,9 @@ const userSchema = new mongoose.Schema(
             type: schemaType.TypeString,
             required: true,
         },
-        created_date: {
-            type: schemaType.TypeDate,
-            default: Date.now,
+        resetLink: {
+            type: schemaType.TypeString,
+            default: '',
         },
     },
     { timestamps: true },

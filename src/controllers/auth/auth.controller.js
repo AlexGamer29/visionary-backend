@@ -1,13 +1,23 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
+const path = require('path')
 const Joi = require('joi')
 const { verifyRefreshToken, generateTokens } = require('../../utils')
-const { SECRET } = require('../../config')
+const {
+    SECRET,
+    RESET_SECRET,
+    HOST_NODEMAILER,
+    PORT_NODEMAILER,
+    USER_NODEMAILER,
+    PASS_NODEMAILER,
+} = require('../../config')
 const {
     findOne,
     deleteDocument,
     getPopulatedData,
     insertNewDocument,
+    updateDocument,
 } = require('../../helpers')
 
 const logInSchema = Joi.object({
@@ -20,6 +30,14 @@ const signUpSchema = Joi.object({
     last_name: Joi.string().required(),
     username: Joi.string().required(),
     email: Joi.string().email().required(),
+    password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,30}$')),
+})
+
+const forgotPasswordSchema = Joi.object({
+    email: Joi.string().email().required(),
+})
+
+const updatePasswordSchema = Joi.object({
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{6,30}$')),
 })
 
@@ -90,6 +108,147 @@ const signUp = async (req, res) => {
     }
 }
 
+const forgotPassword = async (req, res) => {
+    const { email } = req.body
+    try {
+        const validate = await forgotPasswordSchema.validateAsync(req.body)
+
+        const check_user_exist = await findOne('users', { email })
+        if (check_user_exist) {
+            const resetToken = jwt.sign(
+                { id: check_user_exist._id },
+                RESET_SECRET,
+                { expiresIn: '1h' },
+            )
+            const transporter = nodemailer.createTransport({
+                host: HOST_NODEMAILER,
+                port: PORT_NODEMAILER,
+                secure: true,
+                auth: {
+                    user: USER_NODEMAILER,
+                    pass: PASS_NODEMAILER,
+                },
+            })
+
+            const data = {
+                from: 'noreply@hehe.com',
+                to: email,
+                subject: 'Reset Account Password',
+                html: `
+                    <h2>Please click on given link to reset your password</h2>
+                    <a href="${process.env.CLIENT_URL}/api/auth/reset-password/?token=${resetToken}">Click here</a>
+                `,
+            }
+
+            const update = await updateDocument(
+                'users',
+                { email },
+                { resetLink: resetToken },
+            )
+
+            if (update) {
+                transporter.sendMail(data, function (error, body) {
+                    if (error) {
+                        return res.status(400).json({ error: error.message })
+                    }
+                    return res.status(200).json({
+                        message:
+                            'Email has been sent, please follow the instructions',
+                    })
+                })
+            } else {
+                return res
+                    .status(400)
+                    .json({ error: 'Reset password link error' })
+            }
+        }
+    } catch (e) {
+        return res.status(400).send({ status: 400, message: e.message })
+    }
+}
+
+const updatePassword = async (req, res) => {
+    const { token } = req.query
+    const { password } = req.body
+
+    try {
+        const validate = await updatePasswordSchema.validateAsync(req.body)
+
+        jwt.verify(token, RESET_SECRET, async function (error, decodedData) {
+            if (error) {
+                return res
+                    .status(400)
+                    .json({ error: 'Incorrect token or it is expired' })
+            }
+
+            try {
+                const foundUser = await findOne('users', { resetLink: token })
+
+                if (!foundUser) {
+                    return res.status(400).json({
+                        error: 'User with this token does not exist or one-time token is expired',
+                    })
+                }
+
+                const updatePassword = {
+                    password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
+                    resetLink: '',
+                }
+
+                const updateUser = await updateDocument(
+                    'users',
+                    { email: foundUser.email },
+                    updatePassword,
+                )
+
+                if (!updateUser) {
+                    return res
+                        .status(400)
+                        .json({ error: 'Reset password error' })
+                }
+
+                return res
+                    .status(200)
+                    .json({ message: 'Your password has been changed' })
+            } catch (e) {
+                return res.status(500).json({
+                    status: 500,
+                    e: 'Internal server error',
+                    message: e.message,
+                })
+            }
+        })
+    } catch (e) {
+        return res.status(400).send({ status: 400, message: e.message })
+    }
+}
+
+const renderForgotPassword = async (req, res) => {
+    return res.sendFile(
+        path.resolve(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            'public',
+            'forgot-password.html',
+        ),
+    )
+}
+
+const renderResetPassword = async (req, res) => {
+    return res.sendFile(
+        path.resolve(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            'public',
+            'reset-password.html',
+        ),
+    )
+}
+
 const getAccessToken = async (req, res) => {
     const { refreshToken } = req.body
     try {
@@ -142,4 +301,13 @@ const removeRefreshToken = async (req, res) => {
     }
 }
 
-module.exports = { signUp, logIn, getAccessToken, removeRefreshToken }
+module.exports = {
+    signUp,
+    logIn,
+    forgotPassword,
+    updatePassword,
+    renderForgotPassword,
+    renderResetPassword,
+    getAccessToken,
+    removeRefreshToken,
+}

@@ -8,6 +8,10 @@ const { getObjects, putObject, deleteObject } = require('./s3/s3.controller')
 const {
     signUp,
     logIn,
+    forgotPassword,
+    updatePassword,
+    renderForgotPassword,
+    renderResetPassword,
     getAccessToken,
     removeRefreshToken,
 } = require('./auth/auth.controller')
@@ -20,6 +24,10 @@ module.exports = {
     deleteUsers,
     signUp,
     logIn,
+    forgotPassword,
+    updatePassword,
+    renderForgotPassword,
+    renderResetPassword,
     getAccessToken,
     removeRefreshToken,
     getObjects,
