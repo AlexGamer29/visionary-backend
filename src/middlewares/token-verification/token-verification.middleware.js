@@ -23,11 +23,11 @@ function authenticateJWT(req, res, next) {
             if (err) {
                 if (err.name === 'TokenExpiredError') {
                     return res.status(401).json({
-                        message: 'Authentication failed. Token expired.',
+                        message: 'Token expired.',
                     })
                 }
                 return res.status(403).json({
-                    message: 'Authentication failed. Invalid token.',
+                    message: 'Invalid token.',
                 })
             }
             // If the token is valid, you can attach the user object to the request for later use in route handlers

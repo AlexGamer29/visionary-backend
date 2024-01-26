@@ -14,6 +14,7 @@ const client = new S3Client({
         secretAccessKey: AWS_SECRET_ACCESS_KEY,
     },
     region: S3_REGION,
+    forcePathStyle: true,
 })
 
 // Now you can use the `s3` object to interact with your custom S3-compatible service
