@@ -8,9 +8,7 @@ function authenticateJWT(req, res, next) {
     const authHeader = req.headers.authorization
 
     if (!authHeader) {
-        return res
-            .status(400)
-            .json({ message: 'No token provided.' })
+        return res.status(400).json({ message: 'No token provided.' })
     }
 
     // Check if the Authorization header starts with 'Bearer'

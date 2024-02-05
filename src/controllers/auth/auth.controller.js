@@ -69,7 +69,6 @@ const logIn = async (req, res) => {
             const { accessToken, refreshToken } = await generateTokens(user)
             res.status(200).send({
                 status: 200,
-                user,
                 accessToken,
                 refreshToken,
             })
