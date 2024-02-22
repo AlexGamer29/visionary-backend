@@ -254,7 +254,7 @@ const getAccessToken = async (req, res) => {
         const validate = await getAccessTokenSchema.validateAsync(req.body)
         verifyRefreshToken(refreshToken)
             .then(({ tokenDetails }) => {
-                const payload = { _id: tokenDetails._id }
+                const payload = { id: tokenDetails.id }
                 const accessToken = jwt.sign(payload, SECRET, {
                     expiresIn: '15m',
                 })
