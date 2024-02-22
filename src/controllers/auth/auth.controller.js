@@ -60,7 +60,7 @@ const logIn = async (req, res) => {
             const passwordIsValid = bcrypt.compareSync(password, user.password)
             if (!passwordIsValid) {
                 return res.status(404).send({
-                    status: 400,
+                    status: 404,
                     message: 'Invalid Email or Password!',
                 })
             }
@@ -265,7 +265,7 @@ const getAccessToken = async (req, res) => {
                 })
             })
             .catch((err) => {
-                res.status(500).json(err.message)
+                res.status(500).send({ status: 500, err })
             })
     } catch (e) {
         res.status(400).send({ status: 400, message: e.message })

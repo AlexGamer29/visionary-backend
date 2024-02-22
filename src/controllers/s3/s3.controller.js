@@ -12,7 +12,10 @@ const getObjects = async (req, res) => {
         client
             .send(command)
             .then((data) => res.status(200).send({ status: 200, data }))
-            .catch((err) => res.status(500).send({ status: 200, err }))
+            .catch((err) => {
+                console.log(err)
+                res.status(500).send({ status: 500, err })
+            })
     } catch (e) {
         res.status(400).send({ status: 400, message: e.message })
     }
@@ -71,7 +74,7 @@ const deleteObject = async (req, res, next) => {
         client
             .send(command)
             .then((data) => res.status(200).send({ status: 200, data }))
-            .catch((err) => res.status(500).send({ status: 200, err }))
+            .catch((err) => res.status(500).send({ status: 500, err }))
     } catch (e) {
         res.status(400).send({ status: 400, message: e.message })
     }
