@@ -31,12 +31,16 @@ const verifyRefreshToken = (refreshToken) => {
     return new Promise(async (resolve, reject) => {
         const userToken = await findOne('tokens', { token: refreshToken })
         if (!userToken) {
-            return reject({ error: true, message: 'Invalid refresh token' })
+            return reject(  { status: 403, error: true, message: 'Invalid refresh token' })
         }
 
         jwt.verify(refreshToken, privateKey, (err, tokenDetails) => {
-            if (err)
-                return reject({ error: true, message: 'Invalid refresh token' })
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    return reject({ status: 401, error: true, message: 'Refresh token expired. Please login again.' })
+                }
+                return reject({ status: 402, error: true, message: 'Refresh token incorrect' })
+            }
             resolve({
                 tokenDetails,
                 error: false,

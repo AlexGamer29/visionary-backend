@@ -265,7 +265,7 @@ const getAccessToken = async (req, res) => {
                 })
             })
             .catch((err) => {
-                res.status(500).send({ status: 500, err })
+                res.status(err.status).send(err)
             })
     } catch (e) {
         res.status(400).send({ status: 400, message: e.message })
